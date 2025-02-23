@@ -1,0 +1,118 @@
+
+<!doctype html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <title>{% block title %}{% endblock %} | Nerdy Puddle</title>
+    <style>
+      /* Nerdy theme customizations */
+      body {
+        font-family: 'Courier New', Courier, monospace;
+      }
+    </style>
+  </head>
+  <body class="flex flex-col min-h-screen bg-gray-900 text-green-400">
+    <!-- Wrapper for sidebar and main content -->
+    <div class="flex flex-grow">
+      <!-- Animated Sidebar -->
+      <aside id="sidebar" class="relative z-40 transition-transform duration-300 ease-in-out transform -translate-x-full bg-gray-800 w-64 flex flex-col p-6 border-r border-gray-700">
+        <!-- Branding -->
+        <a href="/" class="text-2xl font-bold mb-8 text-green-300">Captcha Mart</a>
+        <!-- Navigation Links -->
+        <nav class="flex flex-col space-y-4">
+          <a href="{% url 'item:new' %}" class="text-lg font-mono hover:text-green-200 transition-colors">New item</a>
+          <a href="{% url 'item:items' %}" class="text-lg font-mono hover:text-green-200 transition-colors">Browse</a>
+          {% if request.user.is_authenticated %}
+            <a href="{% url 'conversation:inbox' %}" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-500 transition-colors font-mono">Inbox</a>
+            <a href="{% url 'dashboard:index' %}" class="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600 transition-colors font-mono">Dashboard</a>
+          {% else %}
+            <a href="{% url 'core:signup' %}" class="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-500 transition-colors font-mono">Sign up</a>
+            <a href="{% url 'core:login' %}" class="px-4 py-2 bg-gray-700 text-white rounded hover:bg-gray-600 transition-colors font-mono">Log in</a>
+          {% endif %}
+        </nav>
+        <!-- Toggle Button for Sidebar Collapse -->
+        <button id="sidebarToggle" class="absolute top-4 right-[-40px] bg-green-600 hover:bg-green-500 text-white rounded-full p-2 focus:outline-none transition-all duration-300">
+          ☰
+        </button>
+      </aside>
+
+      <!-- Main Content Area -->
+      <div id="mainContent" class="flex-grow p-6 ml-0 transition-all duration-300">
+        {% block content %}
+          <!-- Sample Analytic Dashboard Content -->
+          <div class="mb-8">
+            <h1 class="text-3xl font-bold text-green-300">Dashboard</h1>
+            <p class="mt-2 text-green-400">Overview of your nerdy analytics</p>
+          </div>
+          <!-- Metric Cards -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+            <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+              <h3 class="text-xl font-bold text-green-300">Revenue</h3>
+              <p class="text-3xl font-bold mt-2">$24,000</p>
+              <p class="text-sm text-green-400">+12% from last month</p>
+            </div>
+            <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+              <h3 class="text-xl font-bold text-green-300">Users</h3>
+              <p class="text-3xl font-bold mt-2">1,200</p>
+              <p class="text-sm text-green-400">+8% from last month</p>
+            </div>
+            <div class="bg-gray-800 p-6 rounded-lg shadow-lg">
+              <h3 class="text-xl font-bold text-green-300">Orders</h3>
+              <p class="text-3xl font-bold mt-2">350</p>
+              <p class="text-sm text-green-400">-3% from last month</p>
+            </div>
+          </div>
+          <!-- Sales Chart Placeholder -->
+          <div class="mt-10 bg-gray-800 shadow rounded-lg p-6">
+            <h3 class="text-lg font-bold text-green-300 mb-4">Sales Chart</h3>
+            <div class="h-64 flex items-center justify-center text-green-500">
+              [Chart placeholder]
+            </div>
+          </div>
+        {% endblock %}
+      </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="py-6 px-6 bg-gray-800">
+      <div class="flex justify-between max-w-7xl mx-auto">
+        <div class="w-2/3">
+          <h3 class="mb-5 text-green-300 font-bold">About</h3>
+          <p class="text-lg text-green-400">Nerdy Puddle is a hub for all your technical insights and analytics. Geek out with us!</p>
+        </div>
+        <div class="w-1/3">
+          <h3 class="mb-5 text-green-300 font-bold">Menu</h3>
+          <ul class="space-y-2">
+            <li><a href="#" class="text-lg text-green-400 hover:text-green-300 transition-colors">About</a></li>
+            <li><a href="{% url 'core:contact' %}" class="text-lg text-green-400 hover:text-green-300 transition-colors">Contact</a></li>
+            <li><a href="#" class="text-lg text-green-400 hover:text-green-300 transition-colors">Privacy policy</a></li>
+            <li><a href="#" class="text-lg text-green-400 hover:text-green-300 transition-colors">Term of use</a></li>
+          </ul>
+        </div>
+      </div>
+    </footer>
+
+    <!-- JavaScript for Sidebar Toggle -->
+    <script>
+      const sidebarToggle = document.getElementById('sidebarToggle');
+      const sidebar = document.getElementById('sidebar');
+      const mainContent = document.getElementById('mainContent');
+
+      sidebarToggle.addEventListener('click', () => {
+        // Toggle sidebar slide in/out
+        sidebar.classList.toggle('-translate-x-full');
+        // Optionally adjust main content margin when sidebar is hidden/shown
+        if (sidebar.classList.contains('-translate-x-full')) {
+          mainContent.classList.remove('ml-64');
+          mainContent.classList.add('ml-0');
+        } else {
+          mainContent.classList.remove('ml-0');
+          mainContent.classList.add('ml-64');
+        }
+      });
+    </script>
+  </body>
+</html>
